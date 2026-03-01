@@ -206,12 +206,6 @@ export default function Login({ onCancel }: LoginProps) {
                                     className="peer block w-full appearance-none border-0 border-b border-zinc-200 bg-transparent px-0 py-3 text-base text-zinc-200 focus:border-white focus:outline-none focus:ring-0 focus:shadow-[0_4px_24px_rgba(255,255,255,0.02)] transition-all duration-300 placeholder-zinc-500"
                                     placeholder="name@example.com (Email)"
                                 />
-                                <label
-                                    htmlFor="email"
-                                    className="absolute left-0 top-3 -z-10 origin-[0] -translate-y-7 scale-75 transform text-sm text-zinc-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-7 peer-focus:scale-75 peer-focus:text-zinc-400"
-                                >
-                                    Corporate / Personal Email
-                                </label>
                             </div>
 
                             {!isForgot && (
@@ -227,12 +221,6 @@ export default function Login({ onCancel }: LoginProps) {
                                         className="peer block w-full appearance-none border-0 border-b border-zinc-200 bg-transparent px-0 py-3 text-base text-zinc-200 focus:border-white focus:outline-none focus:ring-0 focus:shadow-[0_4px_24px_rgba(255,255,255,0.02)] transition-all duration-300 placeholder-zinc-500"
                                         placeholder="•••••••• (Password)"
                                     />
-                                    <label
-                                        htmlFor="password"
-                                        className="absolute left-0 top-5 -z-10 origin-[0] -translate-y-7 scale-75 transform text-sm text-zinc-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-7 peer-focus:scale-75 peer-focus:text-zinc-400"
-                                    >
-                                        Secure Passphrase
-                                    </label>
                                 </div>
                             )}
 
