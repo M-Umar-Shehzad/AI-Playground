@@ -7,7 +7,7 @@ import { Send, Sparkles, Check, Loader2 } from "lucide-react";
 import { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, UIMessage } from "ai";
 import { CountryOption } from "../CountrySelectModal";
 
 interface ChatInterfaceProps {
@@ -59,13 +59,13 @@ export default function ChatInterface({ user, userCountry, onLoginRequest, onTra
 
     const { messages, sendMessage, status, setMessages } = useChat({
         transport,
-        initialMessages: [
+        messages: [
             {
                 id: "1",
                 role: "assistant",
-                parts: [{ type: "text", text: "SYSTEM ACTIVE. I am Flux — your financial command center. Input transaction or query." }]
+                parts: [{ type: "text", text: "I am Flux — your financial command center. Input transaction or query." }]
             }
-        ]
+        ] as UIMessage[]
     });
 
     const [input, setInput] = useState("");
