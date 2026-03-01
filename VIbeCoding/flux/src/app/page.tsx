@@ -423,23 +423,24 @@ export default function Home() {
           <h1 className="text-xl font-medium tracking-tighter text-[var(--foreground)]">Flux</h1>
         </div>
         <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
+            {/* Lamp Pull Wire */}
+            <div className="hidden md:block" style={{ position: 'relative', width: 30, alignSelf: 'stretch', overflow: 'visible', zIndex: 50 }}>
+              <LampPullToggle isDark={isDark} onToggle={toggleTheme} />
+            </div>
+
+            {/* Country Selector Toggle */}
+            <button
+              onClick={() => setShowCountryModal(true)}
+              className="flex items-center gap-2 text-xs font-medium tracking-wide text-[var(--muted)] hover:text-[var(--foreground)] transition-colors uppercase border border-[var(--border)] px-3 py-2 rounded-full hover:bg-[var(--border)]"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>{userCountry ? userCountry.code : "Set Region"}</span>
+            </button>
+          </div>
+
           {user ? (
             <div className="flex items-center gap-4">
-
-              {/* Lamp Pull Wire */}
-              <div className="hidden md:block" style={{ position: 'relative', width: 30, alignSelf: 'stretch', overflow: 'visible', zIndex: 50 }}>
-                <LampPullToggle isDark={isDark} onToggle={toggleTheme} />
-              </div>
-
-              {/* Country Selector Toggle */}
-              <button
-                onClick={() => setShowCountryModal(true)}
-                className="flex items-center gap-2 text-xs font-medium tracking-wide text-[var(--muted)] hover:text-[var(--foreground)] transition-colors uppercase border border-[var(--border)] px-3 py-2 rounded-full hover:bg-[var(--border)]"
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>{userCountry ? userCountry.code : "Set Region"}</span>
-              </button>
-
               <div className="relative">
                 <button
                   onClick={() => setShowEmailDropdown(prev => !prev)}
@@ -626,15 +627,13 @@ export default function Home() {
         <section className="lg:col-span-5 space-y-6 z-10 flex flex-col relative w-full items-end lg:items-center">
 
           {/* Floating Magnetic Calendar Trigger */}
-          {user && (
-            <div className="absolute -top-6 right-0 lg:-top-6 lg:-right-6 z-50">
-              <MagneticCalendarTrigger
-                date={selectedDate}
-                onClick={() => setIsCalendarOpen(true)}
-                isActive={isCalendarOpen}
-              />
-            </div>
-          )}
+          <div className="absolute -top-6 right-0 lg:-top-6 lg:-right-6 z-50">
+            <MagneticCalendarTrigger
+              date={selectedDate}
+              onClick={() => setIsCalendarOpen(true)}
+              isActive={isCalendarOpen}
+            />
+          </div>
 
           {/* AI Command Center */}
           {isToday ? (
