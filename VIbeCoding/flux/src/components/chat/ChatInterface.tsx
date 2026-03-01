@@ -261,7 +261,7 @@ export default function ChatInterface({ user, userCountry, onLoginRequest, onTra
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         disabled={isLoading}
-                        placeholder={user ? "Type..." : "Ask Flux a question..."}
+                        placeholder={user ? "Add an expense..." : "Share your expenses with Flux..."}
                         className="w-full bg-transparent py-4 pl-3 pr-14 text-sm font-medium text-[var(--foreground)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-0 transition-all disabled:opacity-50 tracking-wide"
                     />
                     <button
