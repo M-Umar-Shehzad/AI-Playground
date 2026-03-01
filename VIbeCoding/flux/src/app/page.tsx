@@ -8,6 +8,7 @@ import ChatInterface from "@/components/chat/ChatInterface";
 import Calendar from "@/components/Calendar";
 import MagneticCalendarTrigger from "@/components/MagneticCalendarTrigger";
 import CountrySelectModal, { CountryOption, COUNTRIES } from "@/components/CountrySelectModal";
+import WelcomeModal from "@/components/WelcomeModal";
 import LampPullToggle from "@/components/LampPullToggle";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ArrowDownRight, Wallet, Activity, Globe, X, ChevronLeft, ChevronRight, Clock, Sun, Moon } from "lucide-react";
@@ -29,9 +30,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
 
-  // Profile / Country State
-  const [userCountry, setUserCountry] = useState<CountryOption | null>(null);
+  // Profile / Country / Welcome State
+  const [userCountry, setUserCountry] = useState<CountryOption | null>(() => COUNTRIES.find(c => c.code === "PK") || null);
   const [showCountryModal, setShowCountryModal] = useState(false);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [forcingCountrySetup, setForcingCountrySetup] = useState(false);
 
   // Calendar State
@@ -97,12 +99,19 @@ export default function Home() {
         if (matched) setUserCountry(matched);
         setForcingCountrySetup(false);
       } else {
-        // Force setup only once via local storage
-        const hasSeen = localStorage.getItem(`hasSeenCountry_${currentUser.id}`);
-        if (!hasSeen) {
+        // New user sequence: Welcome Manual -> Country Setup
+        const hasSeenWelcome = localStorage.getItem(`hasSeenWelcome_${currentUser.id}`);
+        if (!hasSeenWelcome) {
           setForcingCountrySetup(true);
-          setShowCountryModal(true);
-          localStorage.setItem(`hasSeenCountry_${currentUser.id}`, 'true');
+          setShowWelcomeModal(true);
+          localStorage.setItem(`hasSeenWelcome_${currentUser.id}`, 'true');
+        } else {
+          const hasSeenCountry = localStorage.getItem(`hasSeenCountry_${currentUser.id}`);
+          if (!hasSeenCountry) {
+            setForcingCountrySetup(true);
+            setShowCountryModal(true);
+            localStorage.setItem(`hasSeenCountry_${currentUser.id}`, 'true');
+          }
         }
       }
     }
@@ -139,7 +148,7 @@ export default function Home() {
         fetchProfileAndTransactions(currentUser);
       } else {
         setTransactions([]);
-        setUserCountry(null);
+        setUserCountry(COUNTRIES.find(c => c.code === "PK") || null);
         setLoading(false);
       }
     });
@@ -407,6 +416,22 @@ export default function Home() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Welcome Manual Modal */}
+      <WelcomeModal
+        isOpen={showWelcomeModal}
+        onNext={() => {
+          setShowWelcomeModal(false);
+          if (user) {
+            const hasSeenCountry = localStorage.getItem(`hasSeenCountry_${user.id}`);
+            if (!hasSeenCountry) {
+              setForcingCountrySetup(true);
+              setShowCountryModal(true);
+              localStorage.setItem(`hasSeenCountry_${user.id}`, 'true');
+            }
+          }
+        }}
+      />
 
       {/* Country Selection Modal */}
       <CountrySelectModal
