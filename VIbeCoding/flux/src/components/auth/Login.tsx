@@ -203,8 +203,8 @@ export default function Login({ onCancel }: LoginProps) {
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="peer block w-full appearance-none border-0 border-b border-zinc-200 bg-transparent px-0 py-3 text-base text-zinc-200 focus:border-white focus:outline-none focus:ring-0 focus:shadow-[0_4px_24px_rgba(255,255,255,0.02)] transition-all duration-300 placeholder-transparent"
-                                    placeholder="name@example.com"
+                                    className="peer block w-full appearance-none border-0 border-b border-zinc-200 bg-transparent px-0 py-3 text-base text-zinc-200 focus:border-white focus:outline-none focus:ring-0 focus:shadow-[0_4px_24px_rgba(255,255,255,0.02)] transition-all duration-300 placeholder-zinc-500"
+                                    placeholder="name@example.com (Email)"
                                 />
                                 <label
                                     htmlFor="email"
@@ -224,8 +224,8 @@ export default function Login({ onCancel }: LoginProps) {
                                         minLength={6}
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="peer block w-full appearance-none border-0 border-b border-zinc-200 bg-transparent px-0 py-3 text-base text-zinc-200 focus:border-white focus:outline-none focus:ring-0 focus:shadow-[0_4px_24px_rgba(255,255,255,0.02)] transition-all duration-300 placeholder-transparent"
-                                        placeholder="Secure Passphrase"
+                                        className="peer block w-full appearance-none border-0 border-b border-zinc-200 bg-transparent px-0 py-3 text-base text-zinc-200 focus:border-white focus:outline-none focus:ring-0 focus:shadow-[0_4px_24px_rgba(255,255,255,0.02)] transition-all duration-300 placeholder-zinc-500"
+                                        placeholder="•••••••• (Password)"
                                     />
                                     <label
                                         htmlFor="password"
