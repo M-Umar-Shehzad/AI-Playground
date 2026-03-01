@@ -1,0 +1,227 @@
+
+> flux@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.18.15:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 2.9s
+Error [AI_APICallError]: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at ignore-listed frames {
+  cause: undefined,
+  url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:streamGenerateContent?alt=sse',
+  requestBodyValues: [Object],
+  statusCode: 404,
+  responseHeaders: [Object],
+  responseBody: '{\n' +
+    '  "error": {\n' +
+    '    "code": 404,\n' +
+    '    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",\n' +
+    '    "status": "NOT_FOUND"\n' +
+    '  }\n' +
+    '}\n',
+  isRetryable: false,
+  data: [Object]
+}
+ POST /api/chat 200 in 3.6s (compile: 2.4s, render: 1170ms)
+Error [AI_APICallError]: models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at ignore-listed frames {
+  cause: undefined,
+  url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:streamGenerateContent?alt=sse',
+  requestBodyValues: [Object],
+  statusCode: 404,
+  responseHeaders: [Object],
+  responseBody: '{\n' +
+    '  "error": {\n' +
+    '    "code": 404,\n' +
+    '    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",\n' +
+    '    "status": "NOT_FOUND"\n' +
+    '  }\n' +
+    '}\n',
+  isRetryable: false,
+  data: [Object]
+}
+ POST /api/chat 200 in 673ms (compile: 29ms, render: 644ms)
+Error [AI_APICallError]: models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at ignore-listed frames {
+  cause: undefined,
+  url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:streamGenerateContent?alt=sse',
+  requestBodyValues: [Object],
+  statusCode: 404,
+  responseHeaders: [Object],
+  responseBody: '{\n' +
+    '  "error": {\n' +
+    '    "code": 404,\n' +
+    '    "message": "models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",\n' +
+    '    "status": "NOT_FOUND"\n' +
+    '  }\n' +
+    '}\n',
+  isRetryable: false,
+  data: [Object]
+}
+ POST /api/chat 200 in 5.8s (compile: 3.3s, render: 2.6s)
+ POST /api/chat 200 in 1881ms (compile: 633ms, render: 1249ms)
+ GET / 200 in 2.1s (compile: 1192ms, render: 867ms)
+ GET / 200 in 437ms (compile: 111ms, render: 326ms)
+ GET / 200 in 12.1s (compile: 1534ms, render: 10.6s)
+ POST /api/chat 200 in 979ms (compile: 33ms, render: 946ms)
+AI Route Error Caught: result.toDataStreamResponse is not a function
+ POST /api/chat 200 in 4.4s (compile: 707ms, render: 3.7s)
+ GET / 200 in 391ms (compile: 117ms, render: 275ms)
+ GET / 200 in 705ms (compile: 150ms, render: 556ms)
+ GET / 200 in 3.2s (compile: 298ms, render: 2.9s)
+ GET / 200 in 818ms (compile: 284ms, render: 534ms)
+ GET / 200 in 501ms (compile: 150ms, render: 352ms)
+AI Route Error Caught: result.toDataStreamResponse is not a function
+ POST /api/chat 200 in 5.8s (compile: 1876ms, render: 3.9s)
+AI Route Error Caught: result.toDataStreamResponse is not a function
+ POST /api/chat 200 in 3.8s (compile: 15ms, render: 3.8s)
+ GET / 200 in 230ms (compile: 24ms, render: 207ms)
+ GET / 200 in 1589ms (compile: 151ms, render: 1438ms)
+✓ Compiled in 1648ms
+ GET / 200 in 1156ms (compile: 370ms, render: 787ms)
+Error [AI_InvalidPromptError]: Invalid prompt: The messages do not match the ModelMessage[] schema.
+    at ignore-listed frames {
+  prompt: [Object],
+  [cause]: Error [AI_TypeValidationError]: Type validation failed: Value: {}.
+  Error message: [
+    {
+      "expected": "array",
+      "code": "invalid_type",
+      "path": [],
+      "message": "Invalid input: expected array, received Promise"
+    }
+  ]
+      at ignore-listed frames {
+    value: Promise {
+      [Array],
+      [Symbol(async_id_symbol)]: 76143,
+      [Symbol(trigger_async_id_symbol)]: 76117,
+      [Symbol(kResourceStore)]: [Object],
+      [Symbol(kResourceStore)]: [Object],
+      [Symbol(kResourceStore)]: undefined,
+      [Symbol(kResourceStore)]: undefined,
+      [Symbol(kResourceStore)]: undefined,
+      [Symbol(kResourceStore)]: [Object]
+    },
+    context: undefined,
+    [cause]: Error [ZodError]: [
+      {
+        "expected": "array",
+        "code": "invalid_type",
+        "path": [],
+        "message": "Invalid input: expected array, received Promise"
+      }
+    ]
+        at ignore-listed frames
+  }
+}
+ POST /api/chat 200 in 3.3s (compile: 1656ms, render: 1657ms)
+Error [AI_RetryError]: Failed after 3 attempts. Last error: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
+Please retry in 2.905198343s.
+    at ignore-listed frames {
+  cause: undefined,
+  reason: 'maxRetriesExceeded',
+  errors: [Array],
+  lastError: Error [AI_APICallError]: You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash
+  * Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash
+  Please retry in 2.905198343s.
+      at ignore-listed frames {
+    cause: undefined,
+    url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent?alt=sse',
+    requestBodyValues: {
+      generationConfig: [Object],
+      contents: [Array],
+      systemInstruction: [Object],
+      safetySettings: undefined,
+      tools: undefined,
+      toolConfig: undefined,
+      cachedContent: undefined,
+      labels: undefined
+    },
+    statusCode: 429,
+    responseHeaders: {
+      'alt-svc': 'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000',
+      'content-length': '2274',
+      'content-type': 'text/event-stream',
+      date: 'Sat, 28 Feb 2026 22:43:57 GMT',
+      server: 'scaffolding on HTTPServer2',
+      'server-timing': 'gfet4t7; dur=158',
+      vary: 'Origin, X-Origin, Referer',
+      'x-content-type-options': 'nosniff',
+      'x-frame-options': 'SAMEORIGIN',
+      'x-xss-protection': '0'
+    },
+    responseBody: '{\n' +
+      '  "error": {\n' +
+      '    "code": 429,\n' +
+      '    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\nPlease retry in 2.905198343s.",\n' +
+      '    "status": "RESOURCE_EXHAUSTED",\n' +
+      '    "details": [\n' +
+      '      {\n' +
+      '        "@type": "type.googleapis.com/google.rpc.Help",\n' +
+      '        "links": [\n' +
+      '          {\n' +
+      '            "description": "Learn more about Gemini API quotas",\n' +
+      '            "url": "https://ai.google.dev/gemini-api/docs/rate-limits"\n' +
+      '          }\n' +
+      '        ]\n' +
+      '      },\n' +
+      '      {\n' +
+      '        "@type": "type.googleapis.com/google.rpc.QuotaFailure",\n' +
+      '        "violations": [\n' +
+      '          {\n' +
+      '            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",\n' +
+      '            "quotaId": "GenerateRequestsPerDayPerProjectPerModel-FreeTier",\n' +
+      '            "quotaDimensions": {\n' +
+      '              "location": "global",\n' +
+      '              "model": "gemini-2.0-flash"\n' +
+      '            }\n' +
+      '          },\n' +
+      '          {\n' +
+      '            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_requests",\n' +
+      '            "quotaId": "GenerateRequestsPerMinutePerProjectPerModel-FreeTier",\n' +
+      '            "quotaDimensions": {\n' +
+      '              "model": "gemini-2.0-flash",\n' +
+      '              "location": "global"\n' +
+      '            }\n' +
+      '          },\n' +
+      '          {\n' +
+      '            "quotaMetric": "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count",\n' +
+      '            "quotaId": "GenerateContentInputTokensPerModelPerMinute-FreeTier",\n' +
+      '            "quotaDimensions": {\n' +
+      '              "location": "global",\n' +
+      '              "model": "gemini-2.0-flash"\n' +
+      '            }\n' +
+      '          }\n' +
+      '        ]\n' +
+      '      },\n' +
+      '      {\n' +
+      '        "@type": "type.googleapis.com/google.rpc.RetryInfo",\n' +
+      '        "retryDelay": "2s"\n' +
+      '      }\n' +
+      '    ]\n' +
+      '  }\n' +
+      '}\n',
+    isRetryable: true,
+    data: { error: [Object] }
+  }
+}
+ POST /api/chat 200 in 8.1s (compile: 409ms, render: 7.7s)
+  Reload env: .env.local
+ GET / 200 in 1130ms (compile: 517ms, render: 613ms)
+ GET / 200 in 341ms (compile: 20ms, render: 321ms)
+ GET / 200 in 353ms (compile: 134ms, render: 219ms)
+  Reload env: .env.local
+ GET / 200 in 345ms (compile: 222ms, render: 123ms)
+ GET / 200 in 72ms (compile: 6ms, render: 66ms)
+ GET / 200 in 124ms (compile: 24ms, render: 100ms)
+[?25h

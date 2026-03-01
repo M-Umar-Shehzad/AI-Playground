@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --background-top: #ffffff;
+  --background-bottom: #e4e4e7;
+  --foreground: #18181b;
+  --muted: #71717a;
+  --surface: #ffffff;
+  --accent-income: #10b981;
+  --accent-expense: #e11d48;
+  --border: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] {
+  --background-top: #0a0a0a;
+  --background-bottom: #18181b;
+  --foreground: #f4f4f5;
+  --muted: #a1a1aa;
+  --surface: #1c1c1f;
+  --accent-income: #34d399;
+  --accent-expense: #fb7185;
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+@theme inline {
+  --color-background: var(--background-top);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-income: var(--accent-income);
+  --color-expense: var(--accent-expense);
+  --color-border: var(--border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  background-color: var(--background-top) !important;
+  background-image: linear-gradient(to bottom, var(--background-top) 0%, var(--background-bottom) 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--foreground) !important;
+  min-height: 100vh !important;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif !important;
+}
+
+[data-theme='dark'] body,
+[data-theme='dark'] {
+  color-scheme: dark !important;
+}
+
+:root:not([data-theme='dark']) {
+  color-scheme: light !important;
+}
