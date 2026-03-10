@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+}
+
+@layer base {
+    :root {
+        --background: #F8F8F8;
+        --background-top: #FFFFFF;
+        --background-bottom: #EFEFEF;
+        --foreground: #111111;
+        --surface: #FFFFFF;
+        --border: #E4E4E7;
+        --muted: #71717A;
+        --accent-income: #059669;
+        --accent-expense: #E11D48;
+    }
+
+    /* Dark mode — applied when NativeWind sets colorScheme to dark */
+    .dark {
+        --background: #111111;
+        --background-top: #1A1A1D;
+        --background-bottom: #050505;
+        --foreground: #FFFFFF;
+        --surface: #18181A;
+        --border: #2A2A2E;
+        --muted: #A1A1AA;
+        --accent-income: #34D399;
+        --accent-expense: #F43F5E;
+    }
+}
+
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+/* Kill all browser focus outlines (orange/blue rings) globally */
+*:focus,
+*:focus-visible {
+    outline: none !important;
+    outline-style: none !important;
+    box-shadow: none !important;
+}
