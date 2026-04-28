@@ -1,0 +1,86 @@
+.uploader-wrapper {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.upload-options {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.option-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.option-btn:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+}
+
+.option-btn.active {
+    background: var(--text-primary);
+    color: var(--bg-color);
+    border-color: var(--text-primary);
+}
+
+.dropzone {
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.dropzone.drag-active {
+    border-color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+    transform: scale(1.02);
+}
+
+.dropzone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.icon-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.dropzone-content h4 {
+    font-weight: 500;
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.dropzone-content p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+}

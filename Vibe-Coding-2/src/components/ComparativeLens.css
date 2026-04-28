@@ -1,0 +1,73 @@
+.comparative-lens {
+    width: 100%;
+    max-width: 800px;
+    padding: 32px;
+}
+
+.lens-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.lens-header h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.frames-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.frame {
+    flex: 1;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed var(--border-color);
+}
+
+.frame-placeholder {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.diff-indicator {
+    padding: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.delta-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 20px 24px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-item label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.stat-item span {
+    font-size: 1.1rem;
+    font-weight: 500;
+}

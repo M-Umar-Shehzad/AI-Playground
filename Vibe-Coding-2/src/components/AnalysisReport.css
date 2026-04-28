@@ -1,0 +1,135 @@
+.analysis-loading {
+    width: 100%;
+    max-width: 600px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-ring {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--text-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.analysis-report {
+    width: 100%;
+    max-width: 720px;
+    padding: 32px;
+    text-align: left;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.report-title h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 6px;
+}
+
+.tone-badge {
+    font-size: 0.8rem;
+    font-family: inherit;
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.report-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn-secondary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.metadata-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.metadata-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.metadata-item label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.metadata-value {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.story-content {
+    margin-bottom: 28px;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+}
+
+.detected-entities label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background: var(--border-color);
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.8rem;
+}
