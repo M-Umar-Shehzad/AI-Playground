@@ -28,7 +28,7 @@ export const handler = async (event) => {
         };
     }
 
-    const { messages, max_tokens = 1024 } = body;
+    const { messages, max_tokens = 1024, model = 'meta/llama-3.2-90b-vision-instruct' } = body;
 
     // Hard timeout slightly under Netlify's 120s function limit
     const controller = new AbortController();
@@ -42,7 +42,7 @@ export const handler = async (event) => {
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'meta/llama-3.2-90b-vision-instruct',
+                model,
                 messages,
                 max_tokens,
                 temperature: 0.4,

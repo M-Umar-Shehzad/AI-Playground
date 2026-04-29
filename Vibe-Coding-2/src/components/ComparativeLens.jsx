@@ -38,7 +38,7 @@ Frame B: ${descB}
 
 Return ONLY raw JSON. No markdown.`
         }
-    ]);
+    ], 1024, 'meta/llama-3.3-70b-instruct');
     const match = raw.match(/\{[\s\S]*\}/);
     if (match) return JSON.parse(match[0]);
     throw new Error("No valid JSON in compare response");

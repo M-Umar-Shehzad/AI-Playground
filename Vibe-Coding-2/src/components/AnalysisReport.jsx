@@ -33,7 +33,7 @@ function friendlyHttpError(status, rawText) {
     return `AI service error (${status}). Please try again.`;
 }
 
-export async function nimChat(messages, maxTokens = 1024) {
+export async function nimChat(messages, maxTokens = 1024, model = 'meta/llama-3.2-90b-vision-instruct') {
     const isDev = import.meta.env.DEV;
 
     // 100-second client-side abort — acts as a safety net in all environments
@@ -53,7 +53,7 @@ export async function nimChat(messages, maxTokens = 1024) {
                     "Authorization": `Bearer ${import.meta.env.VITE_NIM_API_KEY}`
                 },
                 body: JSON.stringify({
-                    model: "meta/llama-3.2-90b-vision-instruct",
+                    model,
                     messages,
                     max_tokens: maxTokens,
                     temperature: 0.4,
@@ -80,7 +80,7 @@ export async function nimChat(messages, maxTokens = 1024) {
             response = await fetch("/.netlify/functions/nim-proxy", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ messages, max_tokens: maxTokens }),
+                body: JSON.stringify({ messages, max_tokens: maxTokens, model }),
                 signal: controller.signal
             });
         } catch (err) {
