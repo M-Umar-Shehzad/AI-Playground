@@ -83,7 +83,10 @@ export default function ComparativeLens() {
 
     const handleCompare = async () => {
         if (!frameA || !frameB) return;
-        if (!import.meta.env.VITE_NIM_API_KEY) {
+        // Demo mode only in local dev when no API key is configured.
+        // In production the Netlify proxy always handles real API calls.
+        const isDemoMode = import.meta.env.DEV && !import.meta.env.VITE_NIM_API_KEY;
+        if (isDemoMode) {
             setResult({
                 brightness_delta: "Frame B is +12% brighter",
                 atmosphere_shift: "Cooler tone, higher contrast in Frame B",

@@ -21,8 +21,10 @@ export default function DashboardLayout() {
         setStage('report');
         setAnalysisLoading(true);
 
-        if (!import.meta.env.VITE_NIM_API_KEY) {
-            // Demo fallback
+        // Demo mode only in local dev when no API key is configured.
+        // In production the Netlify proxy always handles real API calls.
+        const isDemoMode = import.meta.env.DEV && !import.meta.env.VITE_NIM_API_KEY;
+        if (isDemoMode) {
             await new Promise(r => setTimeout(r, 2100));
             const mock = {
                 scene: "Urban Office", quality: "HDR, High Contrast",
@@ -99,7 +101,7 @@ export default function DashboardLayout() {
                     </div>
                     <div className="status-indicator">
                         <div className="status-dot"></div>
-                        {import.meta.env.VITE_NIM_API_KEY ? 'LIVE' : 'DEMO'}
+                        {(import.meta.env.DEV && !import.meta.env.VITE_NIM_API_KEY) ? 'DEMO' : 'LIVE'}
                     </div>
                 </header>
 
