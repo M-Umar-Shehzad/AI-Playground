@@ -85,7 +85,7 @@ export default function VisionUploader({ onUpload }) {
             <div className="upload-options">
                 <button
                     className={`option-btn ${inputMode === 'file' ? 'active' : ''}`}
-                    onClick={() => { stopWebcam(); setInputMode('file'); }}
+                    onClick={() => { stopWebcam(); setInputMode('file'); fileInputRef.current && fileInputRef.current.click(); }}
                 >
                     <UploadCloud size={18} />
                     File Upload

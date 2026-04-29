@@ -125,10 +125,7 @@ export default function AnalysisReport({ imageData, results, loading, onReset })
         return (
             <motion.div className="analysis-loading glass-panel" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <div className="loader-ring"></div>
-                <h4 style={{ marginTop: '24px' }}>Neural Scene Decomposition active...</h4>
-                <p style={{ color: '#38bdf8', marginTop: '8px', fontSize: '0.9rem' }}>
-                    {import.meta.env.VITE_NIM_API_KEY ? 'Llama 3.2 90B Vision — Precise Analysis' : 'Demo Mode'}
-                </p>
+                <h4 style={{ marginTop: '24px', fontWeight: 400, color: 'var(--text-secondary)' }}>Analyzing...</h4>
             </motion.div>
         );
     }

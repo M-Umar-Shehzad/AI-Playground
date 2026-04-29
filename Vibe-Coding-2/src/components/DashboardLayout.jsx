@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Camera, History, Activity, SlidersHorizontal } from 'lucide-react';
+import { Camera, History, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import VisionUploader from './VisionUploader';
 import SidebarHistory from './SidebarHistory';
@@ -69,7 +69,7 @@ export default function DashboardLayout() {
             <nav className="sidebar">
                 <div className="brand">
                     <div className="brand-dot"></div>
-                    <span className="brand-text">TechMesh'26</span>
+                    <span className="brand-text">Nora</span>
                 </div>
 
                 <div className="nav-items">
@@ -89,13 +89,6 @@ export default function DashboardLayout() {
                 </div>
 
                 <SidebarHistory history={history} />
-
-                <div className="sidebar-footer">
-                    <div className="nav-item" style={{ cursor: 'default' }}>
-                        <SlidersHorizontal strokeWidth={1.5} size={20} />
-                        <span>{import.meta.env.VITE_NIM_API_KEY ? '⚡ Live Mode' : 'Demo Mode'}</span>
-                    </div>
-                </div>
             </nav>
 
             <main className="main-content">
@@ -106,7 +99,7 @@ export default function DashboardLayout() {
                     </div>
                     <div className="status-indicator">
                         <div className="status-dot"></div>
-                        {import.meta.env.VITE_NIM_API_KEY ? 'LIVE — NVIDIA NIM' : 'DEMO MODE'}
+                        {import.meta.env.VITE_NIM_API_KEY ? 'LIVE' : 'DEMO'}
                     </div>
                 </header>
 
