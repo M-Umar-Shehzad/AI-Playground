@@ -33,7 +33,7 @@ function friendlyHttpError(status, rawText) {
     return `AI service error (${status}). Please try again.`;
 }
 
-export async function nimChat(messages, maxTokens = 1024, model = 'meta/llama-3.2-90b-vision-instruct') {
+export async function nimChat(messages, maxTokens = 1024, model = 'meta/llama-3.2-11b-vision-instruct') {
     const isDev = import.meta.env.DEV;
 
     // 100-second client-side abort — acts as a safety net in all environments

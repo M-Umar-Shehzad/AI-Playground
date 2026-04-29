@@ -99,10 +99,11 @@ export default function ComparativeLens() {
         setResult(null);
         setError(null);
         try {
-            setLoadingStep('Analyzing Frame A...');
-            const descA = await analyzeImageDescription(frameA, 'this image (Frame A / Baseline)');
-            setLoadingStep('Analyzing Frame B...');
-            const descB = await analyzeImageDescription(frameB, 'this image (Frame B / Variant)');
+            setLoadingStep('Analyzing both frames...');
+            const [descA, descB] = await Promise.all([
+                analyzeImageDescription(frameA, 'this image (Frame A / Baseline)'),
+                analyzeImageDescription(frameB, 'this image (Frame B / Variant)')
+            ]);
             setLoadingStep('Comparing deltas...');
             const delta = await compareDescriptions(descA, descB);
             setResult(delta);

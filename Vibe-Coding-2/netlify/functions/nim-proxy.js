@@ -28,7 +28,7 @@ export const handler = async (event) => {
         };
     }
 
-    const { messages, max_tokens = 1024, model = 'meta/llama-3.2-90b-vision-instruct' } = body;
+    const { messages, max_tokens = 1024, model = 'meta/llama-3.2-11b-vision-instruct' } = body;
 
     // Hard timeout slightly under Netlify's 120s function limit
     const controller = new AbortController();
