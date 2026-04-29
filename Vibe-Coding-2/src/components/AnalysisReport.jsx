@@ -17,41 +17,81 @@ function extractJSON(str) {
     throw new Error("No valid JSON found in model response.");
 }
 
+// Friendly labels for common HTTP errors
+function friendlyHttpError(status, rawText) {
+    if (status === 504 || status === 524) return 'The AI service took too long to respond. Please try again in a moment.';
+    if (status === 503) return 'The AI service is temporarily unavailable. Please try again shortly.';
+    if (status === 502) return 'The AI service returned an unexpected response. Please try again.';
+    if (status === 401 || status === 403) return 'Authentication failed. The API key may be invalid or expired.';
+    if (status === 429) return 'Rate limit reached — too many requests. Please wait a few seconds and try again.';
+    // Try to extract a JSON error message from the body before showing a generic fallback
+    try {
+        const json = JSON.parse(rawText);
+        if (json.error) return json.error;
+        if (json.detail) return json.detail;
+    } catch { /* not JSON, fall through */ }
+    return `AI service error (${status}). Please try again.`;
+}
+
 export async function nimChat(messages, maxTokens = 1024) {
     const isDev = import.meta.env.DEV;
 
+    // 100-second client-side abort — acts as a safety net in all environments
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 100_000);
+
+    const cleanUp = () => clearTimeout(timeoutId);
+
     if (isDev) {
         // Local dev: Vite proxies /nim-api → NVIDIA directly using .env.local key
-        const response = await fetch("/nim-api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${import.meta.env.VITE_NIM_API_KEY}`
-            },
-            body: JSON.stringify({
-                model: "meta/llama-3.2-90b-vision-instruct",
-                messages,
-                max_tokens: maxTokens,
-                temperature: 0.4,
-            })
-        });
+        let response;
+        try {
+            response = await fetch("/nim-api/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${import.meta.env.VITE_NIM_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: "meta/llama-3.2-90b-vision-instruct",
+                    messages,
+                    max_tokens: maxTokens,
+                    temperature: 0.4,
+                }),
+                signal: controller.signal
+            });
+        } catch (err) {
+            cleanUp();
+            if (err.name === 'AbortError') throw new Error('Request timed out. The AI service took too long to respond.');
+            throw new Error('Unable to reach the AI service. Please check your internet connection and try again.');
+        }
+        cleanUp();
         if (!response.ok) {
-            const err = await response.text();
-            throw new Error(`HTTP ${response.status}: ${err}`);
+            const raw = await response.text().catch(() => '');
+            throw new Error(friendlyHttpError(response.status, raw));
         }
         const data = await response.json();
         return data.choices[0].message.content;
     } else {
         // Production: API key lives only on the server (Netlify env var NIM_API_KEY)
         // Key is NEVER sent to or accessible by the browser
-        const response = await fetch("/.netlify/functions/nim-proxy", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ messages, max_tokens: maxTokens })
-        });
+        let response;
+        try {
+            response = await fetch("/.netlify/functions/nim-proxy", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ messages, max_tokens: maxTokens }),
+                signal: controller.signal
+            });
+        } catch (err) {
+            cleanUp();
+            if (err.name === 'AbortError') throw new Error('Request timed out. The AI service took too long to respond.');
+            throw new Error('Unable to reach the server. Please check your internet connection and try again.');
+        }
+        cleanUp();
         if (!response.ok) {
-            const err = await response.text();
-            throw new Error(`HTTP ${response.status}: ${err}`);
+            const raw = await response.text().catch(() => '');
+            throw new Error(friendlyHttpError(response.status, raw));
         }
         const data = await response.json();
         return data.choices[0].message.content;
@@ -116,7 +156,8 @@ export default function AnalysisReport({ imageData, results, loading, onReset })
             ]);
             setVqaAnswer(answer);
         } catch (err) {
-            setVqaAnswer(`Error: ${err.message}`);
+            setVqaAnswer(`⚠ ${err.message || 'Unable to answer. Please try again.'}`);
+
         }
         setVqaLoading(false);
     };

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { SplitSquareHorizontal, UploadCloud, RefreshCw, Loader } from 'lucide-react';
+import { SplitSquareHorizontal, UploadCloud, RefreshCw, Loader, AlertTriangle, WifiOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { nimChat } from './AnalysisReport';
 import './ComparativeLens.css';
@@ -96,15 +96,16 @@ export default function ComparativeLens() {
         setResult(null);
         setError(null);
         try {
-            setLoadingStep("Analyzing Frame A...");
-            const descA = await analyzeImageDescription(frameA, "this image (Frame A / Baseline)");
-            setLoadingStep("Analyzing Frame B...");
-            const descB = await analyzeImageDescription(frameB, "this image (Frame B / Variant)");
-            setLoadingStep("Comparing deltas...");
+            setLoadingStep('Analyzing Frame A...');
+            const descA = await analyzeImageDescription(frameA, 'this image (Frame A / Baseline)');
+            setLoadingStep('Analyzing Frame B...');
+            const descB = await analyzeImageDescription(frameB, 'this image (Frame B / Variant)');
+            setLoadingStep('Comparing deltas...');
             const delta = await compareDescriptions(descA, descB);
             setResult(delta);
         } catch (err) {
-            setError(err.message);
+            // err.message is already a clean sentence from nimChat — no need to prefix
+            setError(err.message || 'An unexpected error occurred. Please try again.');
         }
         setLoading(false);
         setLoadingStep('');
@@ -172,8 +173,29 @@ export default function ComparativeLens() {
                     </motion.div>
                 )}
                 {error && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ color: '#f87171', textAlign: 'center', marginTop: '12px', fontSize: '0.9rem' }}>
-                        Error: {error}
+                    <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        style={{
+                            marginTop: '16px',
+                            padding: '16px 20px',
+                            background: 'rgba(248, 113, 113, 0.08)',
+                            border: '1px solid rgba(248, 113, 113, 0.25)',
+                            borderRadius: '10px',
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: '12px',
+                        }}
+                    >
+                        {error.toLowerCase().includes('connect') || error.toLowerCase().includes('internet') || error.toLowerCase().includes('reach')
+                            ? <WifiOff size={18} style={{ color: '#f87171', flexShrink: 0, marginTop: '2px' }} />
+                            : <AlertTriangle size={18} style={{ color: '#f87171', flexShrink: 0, marginTop: '2px' }} />
+                        }
+                        <div>
+                            <p style={{ color: '#f87171', fontWeight: 500, marginBottom: '4px', fontSize: '0.9rem' }}>Analysis Failed</p>
+                            <p style={{ color: 'rgba(248,113,113,0.8)', fontSize: '0.85rem', lineHeight: 1.5 }}>{error}</p>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
