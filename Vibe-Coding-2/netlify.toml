@@ -5,7 +5,6 @@
 
 [functions]
   node_bundler = "esbuild"
-  timeout      = 120
 
 # SPA fallback — ensure React routing works on direct URL loads
 [[redirects]]
