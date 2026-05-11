@@ -1,4 +1,4 @@
-# ⚖️ Legal Risk Assessor
+# ⚖️ Legal_Risk_Assessor
 
 > **AI-powered contract auditing for freelancers — know your risks before you sign.**
 
@@ -8,7 +8,7 @@
 
 ## 🎯 The Mission
 
-Freelancers often lack the resources to hire expensive legal counsel to review every contract they sign. The **Legal Risk Assessor** levels the playing field — an AI-driven tool that empowers independent professionals by automatically auditing legal documents, identifying potential risks, and generating professional pushback emails before you sign on the dotted line.
+Freelancers often lack the resources to hire expensive legal counsel to review every contract they sign. The **Legal_Risk_Assessor** levels the playing field — an AI-driven tool that empowers independent professionals by automatically auditing legal documents, identifying potential risks, and generating professional pushback emails before you sign on the dotted line.
 
 ---
 
