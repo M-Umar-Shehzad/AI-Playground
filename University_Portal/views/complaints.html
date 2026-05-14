@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaints Portal | CUSIT Smart Campus Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="toast-container"></div>
+    <div class="dashboard-layout">
+        <!-- Sidebar (Reused from Dashboard) -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
+                <span>CUSIT<br><small style="font-size: 0.65rem; opacity: 0.7; font-weight: 500;">Academic Portal</small></span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/" class="sidebar-link" id="dashboardLink"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
+                <a href="/complaints" class="sidebar-link active"><i class="fas fa-comments"></i> <span>Complaints</span></a>
+                <a href="/events" class="sidebar-link"><i class="fas fa-calendar-alt"></i> <span>Events</span></a>
+                <a href="/fyp" class="sidebar-link"><i class="fas fa-project-diagram"></i> <span>FYP Management</span></a>
+                <a href="/announcements" class="sidebar-link"><i class="fas fa-bullhorn"></i> <span>Announcements</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="sidebarSubmissionBtn" class="btn btn-primary mt-2 mb-4" style="width: 100%; gap: 0.75rem; padding: 0.875rem;" onclick="location.href='/complaints'">
+                    <i class="fas fa-plus"></i> New Submission
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1 style="font-size: 1.5rem;" id="pageTitle">Complaints Portal</h1>
+                <div class="flex-row">
+                    <button class="btn btn-ghost" style="width: 44px; height: 44px; padding: 0; border-radius: 50%;" onclick="showToast('No new notifications', 'info')"><i class="far fa-bell"></i></button>
+                    <button class="btn btn-ghost" id="themeToggle" style="width: 44px; height: 44px; padding: 0; border-radius: 50%;" onclick="toggleTheme()"><i class="far fa-moon"></i></button>
+                    <button class="btn btn-ghost" style="width: 44px; height: 44px; padding: 0; border-radius: 50%;" onclick="showToast('Settings panel coming soon', 'info')"><i class="fas fa-cog"></i></button>
+                    <div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; border: 2px solid var(--border-subtle);">
+                        <img src="" id="userAvatar" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </header>
+
+            <div id="loader" class="flex-row" style="justify-content: center; padding: 5rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-main);"></i></div>
+
+            <!-- Student View Content -->
+            <div id="studentView" style="display: none;">
+                <div style="margin-bottom: 2.5rem;">
+                    <h2 style="font-size: 2.25rem; margin-bottom: 0.5rem;">Student Complaints</h2>
+                    <p style="color: var(--text-muted);">Submit and track your academic or facility-related issues.</p>
+                </div>
+
+                <!-- Submission Paused Banner -->
+                <div id="submissionPaused" class="card" style="display: none; border-left: 6px solid var(--accent-info); background: rgba(59, 130, 246, 0.05); margin-bottom: 2rem;">
+                    <div class="flex-row" style="align-items: flex-start; gap: 1.5rem;">
+                        <div style="width: 48px; height: 48px; background: rgba(59, 130, 246, 0.1); color: var(--accent-info); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;"><i class="fas fa-info"></i></div>
+                        <div>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Submission Paused</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9375rem; margin-bottom: 1.5rem;">You currently have one active complaint in progress. To ensure quality resolution, please wait for it to be resolved before submitting another request.</p>
+                            <button class="btn btn-ghost" disabled style="opacity: 0.5; background: var(--border-subtle);"><i class="fas fa-lock"></i> New Form Locked</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Form Card (Visible if no active complaint) -->
+                <div id="submitForm" class="card" style="display: none; max-width: 700px; margin-bottom: 3rem;">
+                    <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem;"><i class="fas fa-plus-circle" style="color: var(--primary-main); margin-right: 0.5rem;"></i> Submit New Complaint</h3>
+                    <form id="complaintForm">
+                        <div class="form-group"><label class="form-label">Complaint Title</label><input type="text" id="cTitle" class="form-control" placeholder="e.g. WiFi Outage in Library Block B" required></div>
+                        <div class="grid-2">
+                            <div class="form-group"><label class="form-label">Category</label><select id="cCategory" class="form-control" required><option value="Academic">Academic</option><option value="Facility">Facility</option><option value="Administrative">Administrative</option><option value="Other">Other</option></select></div>
+                            <div class="form-group"><label class="form-label">Priority</label><select id="cPriority" class="form-control" required><option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option></select></div>
+                        </div>
+                        <div class="form-group"><label class="form-label">Description</label><textarea id="cDesc" class="form-control" style="min-height: 120px;" placeholder="Provide details about the issue..." required></textarea></div>
+                        <button type="submit" class="btn btn-primary" style="padding: 1rem 2rem;">Submit Complaint</button>
+                    </form>
+                </div>
+
+                <!-- Complaint History -->
+                <div class="card">
+                    <div class="card-header"><h3 style="font-size: 1.25rem;">Complaint History</h3><button class="btn btn-ghost"><i class="fas fa-filter"></i> Filter</button></div>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                            <thead><tr style="border-bottom: 1px solid var(--border-subtle);"><th style="text-align: left; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Title & Category</th><th style="text-align: left; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Date Submitted</th><th style="text-align: left; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Status</th><th style="text-align: left; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Admin Response</th></tr></thead>
+                            <tbody id="studentComplaintsTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin View Content -->
+            <div id="adminView" style="display: none;">
+                <div class="flex-row" style="justify-content: space-between; margin-bottom: 2.5rem;">
+                    <div><h2 style="font-size: 2.25rem; margin-bottom: 0.5rem;">Complaints Management</h2><p style="color: var(--text-muted);">Monitor, assign, and resolve student grievances.</p></div>
+                    <button class="btn btn-ghost" onclick="exportComplaints()"><i class="fas fa-file-export"></i> Export Report</button>
+                </div>
+
+                <div class="grid-4" id="adminStatsRow"></div>
+
+                <div class="card mt-8">
+                    <div class="flex-row" style="gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                        <div class="form-group" style="margin: 0; min-width: 200px;"><label class="form-label">Status</label><select id="filterStatus" class="form-control" onchange="applyFilters()"><option value="">All Statuses</option><option value="Pending">Pending</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option></select></div>
+                        <div class="form-group" style="margin: 0; min-width: 200px;"><label class="form-label">Category</label><select id="filterCategory" class="form-control" onchange="applyFilters()"><option value="">All Categories</option><option value="Academic">Academic</option><option value="Facility">Facility</option><option value="Administrative">Administrative</option><option value="Other">Other</option></select></div>
+                        <div class="form-group" style="margin: 0; min-width: 200px;"><label class="form-label">Priority</label><select id="filterPriority" class="form-control" onchange="applyFilters()"><option value="">All Priorities</option><option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option></select></div>
+                        <button class="btn btn-ghost" style="margin-top: 1.5rem;" onclick="clearFilters()"><i class="fas fa-times-circle"></i> Clear Filters</button>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead><tr style="border-bottom: 1px solid var(--border-subtle);"><th style="text-align: left; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Student Name</th><th style="text-align: left; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Complaint Title</th><th style="text-align: left; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Category</th><th style="text-align: left; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Priority</th><th style="text-align: left; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Status</th><th style="text-align: right; padding: 1rem; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Action</th></tr></thead>
+                            <tbody id="adminComplaintsTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Admin Update Modal (Simplified as Inline Form for now) -->
+    <div id="updateFormContainer" class="card" style="display:none; position: fixed; bottom: 2rem; right: 2rem; width: 450px; z-index: 1000; box-shadow: var(--shadow-lg);">
+        <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Update Complaint #<span id="updateComplaintId"></span></h3>
+        <form id="updateForm">
+            <div class="form-group"><label class="form-label">Status</label><select id="updStatus" class="form-control"><option value="Pending">Pending</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option></select></div>
+            <div class="form-group"><label class="form-label">Admin Response</label><textarea id="updResponse" class="form-control" style="min-height: 80px;"></textarea></div>
+            <div class="flex-row" style="justify-content: flex-end;"><button type="button" class="btn btn-ghost" onclick="closeUpdateForm()">Cancel</button><button type="submit" class="btn btn-primary">Save Changes</button></div>
+        </form>
+    </div>
+
+    <script>
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) window.location.reload();
+        });
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            const icon = type === 'info' ? 'fa-info-circle' : type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        function exportComplaints() {
+            const csvRows = [];
+            const headers = ['ID', 'Student Name', 'Title', 'Category', 'Priority', 'Status', 'Date'];
+            csvRows.push(headers.join(','));
+            allComplaints.forEach(c => {
+                const row = [c.id, `"${c.student_name}"`, `"${c.title}"`, c.category, c.priority, c.status, new Date(c.created_at).toLocaleDateString()];
+                csvRows.push(row.join(','));
+            });
+            const blob = new Blob([csvRows.join('\\n')], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `complaints_report_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            showToast('Report exported successfully', 'success');
+        }
+
+        let allComplaints = [];
+        let me = null;
+
+        function toggleTheme() {
+            const html = document.documentElement; const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark'); localStorage.setItem('campusTheme', isDark ? 'light' : 'dark');
+            document.querySelector('#themeToggle i').className = isDark ? 'far fa-moon' : 'far fa-sun';
+        }
+        if (localStorage.getItem('campusTheme') === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); document.querySelector('#themeToggle i').className = 'far fa-sun'; }
+
+        async function fetchPageData() {
+            try {
+                const meRes = await fetch('/api/me');
+                if (!meRes.ok) window.location.href = '/';
+                me = await meRes.json();
+                document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(me.name)}&background=002D5B&color=fff`;
+                document.getElementById('dashboardLink').href = me.role === 'admin' ? '/admin-dashboard' : '/student-dashboard';
+                
+                const complaintsRes = await fetch('/api/complaints');
+                allComplaints = await complaintsRes.json();
+
+                if (me.role === 'admin') { 
+                    renderAdminView(); 
+                    document.getElementById('sidebarSubmissionBtn').style.display = 'none';
+                } else { 
+                    renderStudentView(); 
+                }
+                document.getElementById('loader').style.display = 'none';
+            } catch (e) { console.error(e); }
+        }
+
+        function renderStudentView() {
+            document.getElementById('studentView').style.display = 'block';
+            const active = allComplaints.find(c => c.status !== 'Resolved');
+            if (active) { document.getElementById('submissionPaused').style.display = 'block'; }
+            else { document.getElementById('submitForm').style.display = 'block'; }
+
+            const table = document.getElementById('studentComplaintsTable');
+            table.innerHTML = allComplaints.map(c => `
+                <tr style="border-bottom: 1px solid var(--border-subtle);">
+                    <td style="padding: 1.5rem 1rem;">
+                        <h4 style="font-size: 0.9375rem; margin-bottom: 0.25rem;">${c.title}</h4>
+                        <p style="font-size: 0.8125rem; color: var(--text-muted);">${c.category} • ${c.priority} Priority</p>
+                    </td>
+                    <td style="padding: 1.5rem 1rem; font-size: 0.875rem; color: var(--text-muted);">${new Date(c.created_at).toLocaleDateString()}</td>
+                    <td style="padding: 1.5rem 1rem;"><span class="badge ${c.status === 'Pending' ? 'badge-warning' : c.status === 'Resolved' ? 'badge-success' : 'badge-danger'}">${c.status}</span></td>
+                    <td style="padding: 1.5rem 1rem; font-size: 0.875rem; font-style: italic; color: var(--text-body);">${c.admin_response ? `"${c.admin_response}"` : '<span style="opacity: 0.4;">Waiting for response...</span>'}</td>
+                </tr>
+            `).join('');
+        }
+
+        async function renderAdminView() {
+            document.getElementById('adminView').style.display = 'block';
+            const statsRes = await fetch('/api/complaints/stats');
+            const stats = await statsRes.json();
+            document.getElementById('adminStatsRow').innerHTML = `
+                <div class="card metric-card"><div class="metric-header"><div class="metric-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-info);"><i class="fas fa-list"></i></div><span class="metric-trend trend-up">+12% this month</span></div><span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">Total Complaints</span><div class="metric-value">${stats.total || 0}</div></div>
+                <div class="card metric-card"><div class="metric-header"><div class="metric-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-danger);"><i class="fas fa-clock"></i></div></div><span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">Pending Review</span><div class="metric-value">${stats.Pending || 0}</div><span style="font-size: 0.75rem; color: var(--accent-danger); font-weight: 600;">Needs immediate action</span></div>
+                <div class="card metric-card"><div class="metric-header"><div class="metric-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-info);"><i class="fas fa-sync"></i></div></div><span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">In Progress</span><div class="metric-value">${stats['In Progress'] || 0}</div><span style="font-size: 0.75rem; color: var(--text-muted);">Currently being handled</span></div>
+                <div class="card metric-card"><div class="metric-header"><div class="metric-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-success);"><i class="fas fa-check-circle"></i></div></div><span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">Resolved</span><div class="metric-value">${stats.Resolved || 0}</div><span style="font-size: 0.75rem; color: var(--accent-success); font-weight: 600;">84% resolution rate</span></div>`;
+            renderAdminTable(allComplaints);
+        }
+
+        function renderAdminTable(data) {
+            const table = document.getElementById('adminComplaintsTable');
+            table.innerHTML = data.map(c => `
+                <tr style="border-bottom: 1px solid var(--border-subtle);">
+                    <td style="padding: 1.25rem 1rem;"><div class="flex-row"><div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">${c.student_name.split(' ').map(n=>n[0]).join('')}</div><div><p style="font-size: 0.9375rem; font-weight: 600;">${c.student_name}</p><p style="font-size: 0.75rem; color: var(--text-muted);">ID: ${c.student_id}</p></div></div></td>
+                    <td style="padding: 1.25rem 1rem; font-size: 0.875rem; max-width: 300px;">${c.title}</td>
+                    <td style="padding: 1.25rem 1rem; font-size: 0.875rem; color: var(--text-muted);">${c.category}</td>
+                    <td style="padding: 1.25rem 1rem;"><span class="badge ${c.priority === 'High' ? 'badge-danger' : c.priority === 'Medium' ? 'badge-warning' : 'badge-success'}" style="font-size: 0.625rem;">${c.priority}</span></td>
+                    <td style="padding: 1.25rem 1rem;"><span class="badge ${c.status === 'Pending' ? 'badge-warning' : c.status === 'Resolved' ? 'badge-success' : 'badge-danger'}" style="font-size: 0.625rem;">${c.status}</span></td>
+                    <td style="padding: 1.25rem 1rem; text-align: right;"><button class="btn btn-ghost" style="padding: 0.5rem 1rem; font-size: 0.75rem;" onclick="openUpdateForm(${c.id}, '${c.status}', '${(c.admin_response || '').replace(/'/g, "\\'")}')">Action</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function openUpdateForm(id, status, response) { document.getElementById('updateComplaintId').textContent = id; document.getElementById('updStatus').value = status; document.getElementById('updResponse').value = response; document.getElementById('updateFormContainer').style.display = 'block'; }
+        function closeUpdateForm() { document.getElementById('updateFormContainer').style.display = 'none'; }
+
+        function applyFilters() {
+            const s = document.getElementById('filterStatus').value; const c = document.getElementById('filterCategory').value; const p = document.getElementById('filterPriority').value;
+            let filtered = allComplaints; if (s) filtered = filtered.filter(x => x.status === s); if (c) filtered = filtered.filter(x => x.category === c); if (p) filtered = filtered.filter(x => x.priority === p);
+            renderAdminTable(filtered);
+        }
+        function clearFilters() { document.getElementById('filterStatus').value = ''; document.getElementById('filterCategory').value = ''; document.getElementById('filterPriority').value = ''; renderAdminTable(allComplaints); }
+
+        document.getElementById('complaintForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                const res = await fetch('/api/complaints', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: document.getElementById('cTitle').value, category: document.getElementById('cCategory').value, priority: document.getElementById('cPriority').value, description: document.getElementById('cDesc').value }) });
+                if (res.ok) location.reload();
+            } catch (e) {}
+        });
+
+        document.getElementById('updateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('updateComplaintId').textContent;
+            try {
+                const res = await fetch(`/api/complaints/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: document.getElementById('updStatus').value, admin_response: document.getElementById('updResponse').value }) });
+                if (res.ok) location.reload();
+            } catch (e) {}
+        });
+
+        document.addEventListener('DOMContentLoaded', fetchPageData);
+    </script>
+</body>
+</html>

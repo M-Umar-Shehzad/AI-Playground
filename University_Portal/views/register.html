@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | CUSIT Smart Campus Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: var(--bg-card); border-radius: var(--radius-lg); max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 2.5rem; box-shadow: var(--shadow-lg); position: relative; }
+        .modal-box h2 { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+        .modal-box p { font-size: 0.875rem; line-height: 1.7; color: var(--text-body); margin-bottom: 1rem; }
+        .modal-box h4 { font-size: 1rem; margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--text-heading); }
+        .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: color var(--transition-fast); }
+        .modal-close:hover { color: var(--text-heading); }
+    </style>
+</head>
+<body class="auth-layout">
+    <div class="auth-panel-info">
+        <div class="sidebar-logo" style="margin-bottom: 2rem;">
+            <div style="background: #fff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-graduation-cap" style="color: var(--primary-main); font-size: 1.5rem;"></i>
+            </div>
+        </div>
+        <h1 style="font-size: 3rem; line-height: 1.1; margin-bottom: 1.5rem; color: #fff;">Join the CUSIT<br>Community</h1>
+        <p style="font-size: 1.125rem; color: rgba(255,255,255,0.8); margin-bottom: 3rem; max-width: 400px;">
+            Create your academic portal account to unlock campus services and stay connected.
+        </p>
+        
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="flex-row">
+                <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-tools"></i></div>
+                <div style="display: flex; flex-direction: column;"><span style="font-weight: 600;">Access Services</span><span style="font-size: 0.875rem; opacity: 0.7;">Manage your academic journey with centralized tools.</span></div>
+            </div>
+            <div class="flex-row">
+                <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-clipboard-list"></i></div>
+                <div style="display: flex; flex-direction: column;"><span style="font-weight: 600;">Track Complaints</span><span style="font-size: 0.875rem; opacity: 0.7;">Submit and monitor campus-related issues seamlessly.</span></div>
+            </div>
+            <div class="flex-row">
+                <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-calendar-check"></i></div>
+                <div style="display: flex; flex-direction: column;"><span style="font-weight: 600;">Join Events</span><span style="font-size: 0.875rem; opacity: 0.7;">Stay updated with academic and extracurricular activities.</span></div>
+            </div>
+        </div>
+        
+        <div style="position: absolute; bottom: 3rem; left: 5rem; font-size: 0.875rem; opacity: 0.6;">
+            © 2026 CUSIT University. All rights reserved.
+        </div>
+    </div>
+    
+    <div class="auth-panel-form">
+        <div class="auth-card">
+            <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Create Account</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2.5rem;">Enter your details to register for the portal.</p>
+            
+            <div id="errorBanner" class="badge badge-danger" style="display: none; width: 100%; padding: 1rem; margin-bottom: 1.5rem; text-transform: none; justify-content: center; border-radius: var(--radius-sm);">
+                <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+            </div>
+
+            <form action="/auth/register" method="POST" id="registerForm">
+                <div class="form-group"><label class="form-label">Full Name</label><input type="text" name="name" class="form-control" placeholder="e.g. Jane Doe" required></div>
+                <div class="form-group"><label class="form-label">University Email</label><input type="email" name="email" class="form-control" placeholder="e.g. name@cusit.edu.pk" required></div>
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <select name="department" class="form-control" required>
+                        <option value="" disabled selected>Select your department</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Electrical Engineering">Electrical Engineering</option>
+                        <option value="Business Administration">Business Administration</option>
+                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                        <option value="Social Sciences">Social Sciences</option>
+                    </select>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label class="form-label">Password</label><input type="password" name="password" id="regPassword" class="form-control" placeholder="••••••••" required minlength="6"></div>
+                    <div class="form-group"><label class="form-label">Confirm Password</label><input type="password" id="confirmPassword" class="form-control" placeholder="••••••••" required></div>
+                </div>
+                <p id="passwordError" style="display: none; color: var(--accent-danger); font-size: 0.8125rem; margin-top: -0.75rem; margin-bottom: 1rem;"><i class="fas fa-exclamation-triangle"></i> Passwords do not match.</p>
+                
+                <div class="form-group" style="display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.5rem;">
+                    <input type="checkbox" id="terms" style="width: 16px; height: 16px; margin-top: 4px; accent-color: var(--primary-main);" required>
+                    <label for="terms" style="font-size: 0.875rem; color: var(--text-muted); cursor: pointer;">
+                        I agree to the <a href="#" onclick="openModal('termsModal'); return false;" style="color: var(--primary-light); font-weight: 600;">Terms and Conditions</a> and <a href="#" onclick="openModal('privacyModal'); return false;" style="color: var(--primary-light); font-weight: 600;">Privacy Policy</a>.
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1rem; margin-top: 1rem;">Create Account</button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 2rem; color: var(--text-muted);">
+                Already have an account? <a href="/" style="color: var(--primary-light); font-weight: 700;">Sign In</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div class="modal-overlay" id="termsModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('termsModal')">&times;</button>
+            <h2><i class="fas fa-file-contract" style="color: var(--primary-main);"></i> Terms and Conditions</h2>
+            <p><strong>Effective Date:</strong> January 1, 2026</p>
+            <p>Welcome to the CUSIT Smart Campus Portal. By creating an account and using this platform, you agree to comply with the following terms and conditions.</p>
+            
+            <h4>1. Acceptance of Terms</h4>
+            <p>By accessing or using the CUSIT Smart Campus Portal, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree, you must not use the portal.</p>
+            
+            <h4>2. User Accounts</h4>
+            <p>You are responsible for maintaining the confidentiality of your login credentials. You agree to provide accurate and complete information during registration. Any unauthorized use of your account must be reported immediately to the administration.</p>
+            
+            <h4>3. Acceptable Use</h4>
+            <p>You agree not to: (a) submit false or misleading complaints, (b) misuse the event registration system, (c) share your credentials with others, (d) attempt to access admin functionalities without authorization, or (e) engage in any activity that disrupts the normal functioning of the portal.</p>
+            
+            <h4>4. Complaints & Submissions</h4>
+            <p>All complaints submitted through the portal are reviewed by the administration. You agree that submissions are made in good faith and are factually accurate. The university reserves the right to take disciplinary action for fraudulent or malicious submissions.</p>
+            
+            <h4>5. Intellectual Property</h4>
+            <p>All content, designs, and features of the CUSIT Smart Campus Portal are the intellectual property of CUSIT University. Reproduction, distribution, or modification without explicit written consent is prohibited.</p>
+            
+            <h4>6. Limitation of Liability</h4>
+            <p>CUSIT University shall not be held liable for any direct, indirect, incidental, or consequential damages arising from the use or inability to use the portal. The portal is provided "as is" without warranties of any kind.</p>
+            
+            <h4>7. Modifications</h4>
+            <p>CUSIT University reserves the right to modify these terms at any time. Continued use of the portal after changes constitutes acceptance of the updated terms.</p>
+            
+            <div style="margin-top: 2rem; text-align: right;">
+                <button class="btn btn-primary" onclick="closeModal('termsModal')">I Understand</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div class="modal-overlay" id="privacyModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('privacyModal')">&times;</button>
+            <h2><i class="fas fa-shield-alt" style="color: var(--primary-main);"></i> Privacy Policy</h2>
+            <p><strong>Effective Date:</strong> January 1, 2026</p>
+            <p>CUSIT University is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your personal information when you use the Smart Campus Portal.</p>
+            
+            <h4>1. Information We Collect</h4>
+            <p>We collect the following information during registration and usage: Full Name, University Email Address, Department, Password (stored securely using bcrypt hashing), Complaints and event registration activity, and FYP group participation data.</p>
+            
+            <h4>2. How We Use Your Information</h4>
+            <p>Your information is used to: (a) authenticate your identity and manage your portal access, (b) process and track complaints, (c) manage event registrations, (d) coordinate FYP group activities, and (e) deliver campus-wide announcements.</p>
+            
+            <h4>3. Data Security</h4>
+            <p>We implement industry-standard security measures to protect your data, including password hashing (bcrypt), secure session management, and role-based access control. However, no method of electronic transmission is 100% secure.</p>
+            
+            <h4>4. Data Sharing</h4>
+            <p>We do not sell, trade, or share your personal information with third parties. Your data is only accessible to authorized administrators within CUSIT University for the purpose of portal management.</p>
+            
+            <h4>5. Your Rights</h4>
+            <p>You have the right to: (a) access your personal data stored in the portal, (b) request correction of inaccurate data, (c) request deletion of your account (subject to administrative review), and (d) withdraw consent for data processing.</p>
+            
+            <h4>6. Data Retention</h4>
+            <p>Your data is retained for the duration of your enrollment at CUSIT University. Upon graduation or account deletion, your personal data will be removed from the system within 90 days.</p>
+            
+            <h4>7. Contact</h4>
+            <p>For privacy-related inquiries, please contact the IT Administration office at <strong>privacy@cusit.edu.pk</strong>.</p>
+            
+            <div style="margin-top: 2rem; text-align: right;">
+                <button class="btn btn-primary" onclick="closeModal('privacyModal')">I Understand</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        
+        // Close modal when clicking overlay
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
+        });
+
+        // Password match validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const pw = document.getElementById('regPassword').value;
+            const cpw = document.getElementById('confirmPassword').value;
+            const err = document.getElementById('passwordError');
+            if (pw !== cpw) {
+                e.preventDefault();
+                err.style.display = 'block';
+                document.getElementById('confirmPassword').style.borderColor = 'var(--accent-danger)';
+            } else {
+                err.style.display = 'none';
+                document.getElementById('confirmPassword').style.borderColor = '';
+            }
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error) {
+            document.getElementById('errorText').textContent = error;
+            document.getElementById('errorBanner').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

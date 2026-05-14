@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Overview | CUSIT Smart Campus Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="toast-container"></div>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
+                <span>CUSIT<br><small style="font-size: 0.65rem; opacity: 0.7; font-weight: 500;">Academic Portal</small></span>
+            </div>
+
+
+            <nav class="sidebar-nav">
+                <a href="/admin-dashboard" class="sidebar-link active">
+                    <i class="fas fa-th-large"></i> <span>Dashboard</span>
+                </a>
+                <a href="/complaints" class="sidebar-link">
+                    <i class="fas fa-comments"></i> <span>Complaints</span>
+                </a>
+                <a href="/events" class="sidebar-link">
+                    <i class="fas fa-calendar-alt"></i> <span>Events</span>
+                </a>
+                <a href="/fyp" class="sidebar-link">
+                    <i class="fas fa-project-diagram"></i> <span>FYP Management</span>
+                </a>
+                <a href="/announcements" class="sidebar-link">
+                    <i class="fas fa-bullhorn"></i> <span>Announcements</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <form action="/auth/logout" method="POST">
+                    <button type="submit" class="sidebar-link" style="background: none; border: none; width: 100%; cursor: pointer;">
+                        <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div>
+                    <h1 style="font-size: 1.75rem; margin-bottom: 0.25rem;">CUSIT Portal</h1>
+                </div>
+                
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="globalSearch" class="search-input" placeholder="Search complaints, students, events...">
+                </div>
+
+                <div class="flex-row">
+                    <button class="btn btn-ghost" style="width: 44px; height: 44px; padding: 0; border-radius: 50%;" onclick="showToast('No new notifications', 'info')">
+                        <i class="far fa-bell"></i>
+                    </button>
+                    <button class="btn btn-ghost" id="themeToggle" style="width: 44px; height: 44px; padding: 0; border-radius: 50%;" onclick="toggleTheme()">
+                        <i class="far fa-moon"></i>
+                    </button>
+                    <button class="btn btn-ghost" style="width: 44px; height: 44px; padding: 0; border-radius: 50%;" onclick="showToast('Settings panel coming soon', 'info')">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; border: 2px solid var(--border-subtle);">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=002D5B&color=fff" id="userAvatar" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </header>
+
+            <div id="loader" class="flex-row" style="justify-content: center; padding: 5rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-main);"></i>
+            </div>
+
+            <div id="dashboardContent" style="display: none;">
+                <div style="margin-bottom: 2.5rem;">
+                    <h2 style="font-size: 2.25rem; margin-bottom: 0.5rem;">Admin Overview</h2>
+                    <p style="color: var(--text-muted);">Monitor institution-wide metrics and pending administrative actions.</p>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid-4 mt-8">
+                    <div class="card metric-card">
+                        <div class="metric-header">
+                            <div class="metric-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-info);">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <span class="metric-trend trend-up">+4.2%</span>
+                        </div>
+                        <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">Total Students</span>
+                        <div class="metric-value" id="statStudents">0</div>
+                    </div>
+
+                    <div class="card metric-card" style="border-top: 4px solid var(--accent-danger);">
+                        <div class="metric-header">
+                            <div class="metric-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-danger);">
+                                <i class="fas fa-comment-dots"></i>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">Total Complaints</span>
+                        <div class="metric-value" id="statComplaints">0</div>
+                        <span style="font-size: 0.875rem; color: var(--accent-danger); font-weight: 600;"><span id="statPendingComplaints">0</span> pending</span>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div class="metric-header">
+                            <div class="metric-icon" style="background: rgba(139, 92, 246, 0.1); color: #8B5CF6;">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">Total Events</span>
+                        <div class="metric-value" id="statEvents">0</div>
+                        <span style="font-size: 0.875rem; color: var(--accent-info); font-weight: 600;"><span id="statUpcomingEvents">0</span> upcoming</span>
+                    </div>
+
+                    <div class="card metric-card" style="border-top: 4px solid var(--primary-main);">
+                        <div class="metric-header">
+                            <div class="metric-icon" style="background: rgba(0, 45, 91, 0.1); color: var(--primary-main);">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                        </div>
+                        <span style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted);">Total FYP Groups</span>
+                        <div class="metric-value" id="statFyp">0</div>
+                        <span style="font-size: 0.875rem; color: var(--text-muted); font-weight: 600;"><span id="statPendingFyp">0</span> pending review</span>
+                    </div>
+                </div>
+
+                <div class="grid-2 mt-8" style="grid-template-columns: 2fr 1fr;">
+                    <!-- Recent Complaints -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 style="font-size: 1.25rem;">Recent Complaints</h3>
+                            <a href="/complaints" style="color: var(--primary-light); font-weight: 600; font-size: 0.875rem;">View All <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div id="recentComplaintsList" style="display: flex; flex-direction: column; gap: 1rem;">
+                            <!-- Complaints loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Announcements -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 style="font-size: 1.25rem;">Announcements</h3>
+                            <button class="btn btn-ghost" style="width: 32px; height: 32px; padding: 0;" onclick="location.href='/announcements'"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                        <div id="announcementsList" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                            <!-- Announcements loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Cards -->
+                <div class="grid-3 mt-8">
+                    <a href="/complaints" class="card flex-row" style="text-decoration: none; border-bottom: 4px solid var(--accent-danger);">
+                        <div style="background: var(--primary-main); color: #fff; width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                            <i class="fas fa-comment-slash"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="font-size: 1rem;">Manage Complaints</h4>
+                        </div>
+                    </a>
+                    <a href="/events" class="card flex-row" style="text-decoration: none; border-bottom: 4px solid var(--accent-info);">
+                        <div style="background: var(--primary-main); color: #fff; width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="font-size: 1rem;">Manage Events</h4>
+                        </div>
+                    </a>
+                    <a href="/fyp" class="card flex-row" style="text-decoration: none; border-bottom: 4px solid var(--text-muted);">
+                        <div style="background: var(--primary-main); color: #fff; width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="font-size: 1rem;">Manage FYP</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) window.location.reload();
+        });
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            const icon = type === 'info' ? 'fa-info-circle' : type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        document.getElementById('globalSearch')?.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const elements = document.querySelectorAll('#recentComplaintsList > div, #announcementsList > div');
+            elements.forEach(el => {
+                el.style.display = el.textContent.toLowerCase().includes(term) ? 'flex' : 'none';
+            });
+        });
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('campusTheme', isDark ? 'light' : 'dark');
+            document.querySelector('#themeToggle i').className = isDark ? 'far fa-moon' : 'far fa-sun';
+        }
+
+        if (localStorage.getItem('campusTheme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.querySelector('#themeToggle i').className = 'far fa-sun';
+        }
+
+        async function fetchDashboardData() {
+            try {
+                const [meRes, studentsRes, compStatsRes, complaintsRes, eventsRes, fypRes, announcementsRes] = await Promise.all([
+                    fetch('/api/me'), fetch('/api/users/students/count'), fetch('/api/complaints/stats'),
+                    fetch('/api/complaints'), fetch('/api/events'), fetch('/api/fyp'), fetch('/api/announcements')
+                ]);
+
+                if (!meRes.ok) window.location.href = '/';
+                const me = await meRes.json();
+                document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(me.name)}&background=002D5B&color=fff`;
+
+                const students = await studentsRes.json();
+                const compStats = await compStatsRes.json();
+                const complaints = await complaintsRes.json();
+                const events = await eventsRes.json();
+                const fyp = await fypRes.json();
+                const announcements = await announcementsRes.json();
+
+                document.getElementById('statStudents').textContent = students.count.toLocaleString();
+                document.getElementById('statComplaints').textContent = (compStats.total || 0).toLocaleString();
+                document.getElementById('statPendingComplaints').textContent = compStats.Pending || 0;
+                
+                const today = new Date().toISOString().split('T')[0];
+                const upcomingEvents = events.filter(e => e.date >= today).length;
+                document.getElementById('statEvents').textContent = events.length;
+                document.getElementById('statUpcomingEvents').textContent = upcomingEvents;
+                
+                const pendingFyp = fyp.filter(g => g.status === 'Pending').length;
+                document.getElementById('statFyp').textContent = fyp.length;
+                document.getElementById('statPendingFyp').textContent = pendingFyp;
+
+                const cList = document.getElementById('recentComplaintsList');
+                cList.innerHTML = complaints.length ? complaints.slice(0, 3).map(c => `
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-app); border-radius: var(--radius-md);">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.875rem;">
+                            ${c.student_name.split(' ').map(n => n[0]).join('')}
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="font-size: 0.9375rem; margin-bottom: 0.125rem;">${c.title}</h4>
+                            <p style="font-size: 0.8125rem; color: var(--text-muted);">${c.student_name} • ID: ${c.student_id}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.375rem;">
+                            <span class="badge ${c.priority === 'High' ? 'badge-danger' : c.priority === 'Medium' ? 'badge-warning' : 'badge-success'}">${c.priority}</span>
+                            <span class="badge ${c.status === 'Pending' ? 'badge-warning' : 'badge-success'}" style="opacity: 0.8;">${c.status}</span>
+                        </div>
+                    </div>
+                `).join('') : '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No recent complaints.</p>';
+
+                const aList = document.getElementById('announcementsList');
+                aList.innerHTML = announcements.length ? announcements.slice(0, 3).map(a => `
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; position: relative; padding-left: 1rem; border-left: 2px solid var(--border-subtle);">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="badge ${a.priority === 'Urgent' ? 'badge-danger' : a.priority === 'Important' ? 'badge-warning' : 'badge-success'}" style="padding: 0.125rem 0.5rem; font-size: 0.625rem;">${a.priority}</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${new Date(a.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <h4 style="font-size: 0.9375rem;">${a.title}</h4>
+                        <p style="font-size: 0.8125rem; color: var(--text-muted); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                            ${a.content}
+                        </p>
+                    </div>
+                `).join('') : '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No announcements.</p>';
+
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
+    </script>
+</body>
+</html>

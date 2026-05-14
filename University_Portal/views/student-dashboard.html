@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CUSIT Smart Campus Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="toast-container"></div>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-graduation-cap" style="font-size: 2rem;"></i>
+                <span>CUSIT<br><small style="font-size: 0.65rem; opacity: 0.7; font-weight: 500;">Academic Portal</small></span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="/student-dashboard" class="sidebar-link active">
+                    <i class="fas fa-th-large"></i> <span>Dashboard</span>
+                </a>
+                <a href="/complaints" class="sidebar-link">
+                    <i class="fas fa-comments"></i> <span>Complaints</span>
+                </a>
+                <a href="/events" class="sidebar-link">
+                    <i class="fas fa-calendar-alt"></i> <span>Events</span>
+                </a>
+                <a href="/fyp" class="sidebar-link">
+                    <i class="fas fa-project-diagram"></i> <span>FYP Management</span>
+                </a>
+                <a href="/announcements" class="sidebar-link">
+                    <i class="fas fa-bullhorn"></i> <span>Announcements</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-primary mt-2 mb-4" style="width: 100%; gap: 0.75rem; padding: 0.875rem;" onclick="location.href='/complaints'">
+                    <i class="fas fa-plus"></i> New Submission
+                </button>
+                <form action="/auth/logout" method="POST">
+                    <button type="submit" class="sidebar-link" style="background: none; border: none; width: 100%; cursor: pointer;">
+                        <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div>
+                    <h1 style="font-size: 1.5rem; color: var(--primary-main);">CUSIT Portal</h1>
+                </div>
+                
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="globalSearch" class="search-input" placeholder="Search events, projects...">
+                </div>
+
+                <div class="flex-row">
+                    <button class="btn btn-ghost" style="width: 44px; height: 44px; padding: 0; border-radius: 50%;" onclick="showToast('No new notifications', 'info')">
+                        <i class="far fa-bell"></i>
+                    </button>
+                    <button class="btn btn-ghost" id="themeToggle" style="width: 44px; height: 44px; padding: 0; border-radius: 50%;" onclick="toggleTheme()">
+                        <i class="far fa-moon"></i>
+                    </button>
+                    <button class="btn btn-ghost" style="width: 44px; height: 44px; padding: 0; border-radius: 50%;" onclick="showToast('Settings panel coming soon', 'info')">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; border: 2px solid var(--border-subtle);">
+                        <img src="" id="userAvatar" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </header>
+
+            <div id="loader" class="flex-row" style="justify-content: center; padding: 5rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-main);"></i>
+            </div>
+
+            <div id="dashboardContent" style="display: none;">
+                <!-- Welcome Banner -->
+                <div style="margin-bottom: 2.5rem;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Welcome back, <span id="userNameHeader"></span>!</h2>
+                    <p style="color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="far fa-calendar-alt"></i> <span id="currentDate"></span>
+                    </p>
+                </div>
+
+                <div class="grid-3">
+                    <!-- Active Complaint -->
+                    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                        <div class="card-header" style="padding: 1.5rem 1.5rem 0.5rem;">
+                            <h3 style="font-size: 1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Active Complaint</h3>
+                            <i class="fas fa-info-circle" style="color: var(--text-muted);"></i>
+                        </div>
+                        <div id="activeComplaintContainer" style="padding: 1rem 1.5rem 1.5rem; flex: 1;">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+
+                    <!-- My Events -->
+                    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                        <div class="card-header" style="padding: 1.5rem 1.5rem 0.5rem;">
+                            <h3 style="font-size: 1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">My Events</h3>
+                            <a href="/events" style="font-size: 0.8125rem; color: var(--primary-light); font-weight: 600;">View All</a>
+                        </div>
+                        <div id="myEventsContainer" style="padding: 1rem 1.5rem 1.5rem; flex: 1; display: flex; flex-direction: column; gap: 1rem;">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+
+                    <!-- FYP Status -->
+                    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                        <div class="card-header" style="padding: 1.5rem 1.5rem 0.5rem;">
+                            <h3 style="font-size: 1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">FYP Management</h3>
+                        </div>
+                        <div id="fypStatusContainer" style="padding: 1rem 1.5rem 1.5rem; flex: 1;">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campus Announcements -->
+                <div style="margin-top: 3rem;">
+                    <div class="flex-row" style="justify-content: space-between; margin-bottom: 1.5rem;">
+                        <h2 style="font-size: 1.75rem;"><i class="fas fa-bullhorn" style="color: var(--primary-main); margin-right: 0.75rem;"></i> Campus Announcements</h2>
+                        <a href="/announcements" class="btn btn-ghost" style="font-size: 0.8125rem;">Explore All</a>
+                    </div>
+                    <div id="announcementsGrid" class="grid-3">
+                        <!-- Dynamic Content -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            const icon = type === 'info' ? 'fa-info-circle' : type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        document.getElementById('globalSearch')?.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const elements = document.querySelectorAll('#announcementsGrid > div, #myEventsContainer > div');
+            elements.forEach(el => {
+                el.style.display = el.textContent.toLowerCase().includes(term) ? 'flex' : 'none';
+            });
+        });
+
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) window.location.reload();
+        });
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('campusTheme', isDark ? 'light' : 'dark');
+            document.querySelector('#themeToggle i').className = isDark ? 'far fa-moon' : 'far fa-sun';
+        }
+
+        if (localStorage.getItem('campusTheme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.querySelector('#themeToggle i').className = 'far fa-sun';
+        }
+
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString(undefined, options);
+
+        async function fetchDashboardData() {
+            try {
+                const meRes = await fetch('/api/me');
+                if (!meRes.ok) window.location.href = '/';
+                const me = await meRes.json();
+                document.getElementById('userNameHeader').textContent = me.name.split(' ')[0];
+                document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(me.name)}&background=002D5B&color=fff`;
+
+                const [complaintsRes, eventsRes, fypRes, announcementsRes] = await Promise.all([
+                    fetch('/api/complaints'), fetch('/api/events'), fetch('/api/fyp'), fetch('/api/announcements')
+                ]);
+
+                const complaints = await complaintsRes.json();
+                const events = await eventsRes.json();
+                const fyp = await fypRes.json();
+                const announcements = await announcementsRes.json();
+
+                // Active Complaint
+                const active = complaints.find(c => c.status !== 'Resolved');
+                const accBox = document.getElementById('activeComplaintContainer');
+                if (active) {
+                    const pct = active.status === 'Pending' ? 20 : 60;
+                    accBox.innerHTML = `
+                        <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.5rem;">TICKET #${active.id.toString().padStart(4, '0')}</p>
+                        <h4 style="font-size: 1.125rem; margin-bottom: 1.5rem;">${active.title}</h4>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">
+                            <span>Status:</span>
+                            <span style="color: var(--primary-light);">${active.status}</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: var(--bg-app); border-radius: 4px; overflow: hidden; margin-bottom: 1.5rem;">
+                            <div style="width: ${pct}%; height: 100%; background: var(--primary-main); border-radius: 4px;"></div>
+                        </div>
+                        <button class="btn btn-ghost" style="width: 100%; font-size: 0.8125rem;" onclick="location.href='/complaints'">View Details</button>
+                    `;
+                } else {
+                    accBox.innerHTML = `
+                        <div style="text-align: center; padding: 2rem 0;">
+                            <i class="fas fa-check-circle" style="font-size: 2.5rem; color: var(--accent-success); opacity: 0.2; margin-bottom: 1rem;"></i>
+                            <p style="color: var(--text-muted); font-size: 0.875rem;">No active complaints.</p>
+                        </div>
+                    `;
+                }
+
+                // My Events
+                const myEvts = events.filter(e => e.isRegistered);
+                const evBox = document.getElementById('myEventsContainer');
+                if (myEvts.length) {
+                    evBox.innerHTML = myEvts.slice(0, 2).map(e => `
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--bg-app); border-radius: var(--radius-md);">
+                            <div style="background: var(--primary-main); color: #fff; width: 44px; height: 44px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1;">
+                                <span style="font-size: 0.625rem; font-weight: 700; text-transform: uppercase;">${new Date(e.date).toLocaleString('default', { month: 'short' })}</span>
+                                <span style="font-size: 1.125rem; font-weight: 800;">${new Date(e.date).getDate()}</span>
+                            </div>
+                            <div>
+                                <h4 style="font-size: 0.9375rem; margin-bottom: 0.125rem;">${e.title}</h4>
+                                <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fas fa-map-marker-alt"></i> ${e.venue}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    evBox.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">Not registered for any events.</p>`;
+                }
+
+                // FYP Status
+                const fBox = document.getElementById('fypStatusContainer');
+                const myG = fyp[0];
+                if (myG) {
+                    fBox.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div style="width: 48px; height: 48px; background: var(--primary-main); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <p style="font-size: 0.625rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">FYP Management</p>
+                                <h4 style="font-size: 1rem;">${myG.group_name}</h4>
+                            </div>
+                        </div>
+                        <div style="background: var(--bg-app); padding: 1rem; border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8125rem; font-weight: 600;">${myG.status === 'Pending' ? 'Pending Approval' : 'Active Project'}</span>
+                            <button class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.75rem;" onclick="location.href='/fyp'">Portal</button>
+                        </div>
+                    `;
+                } else {
+                    fBox.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No FYP group found.</p>`;
+                }
+
+                // Announcements
+                const aGrid = document.getElementById('announcementsGrid');
+                aGrid.innerHTML = announcements.slice(0, 3).map(a => `
+                    <div class="card" style="border-top: 4px solid ${a.priority === 'Urgent' ? 'var(--accent-danger)' : a.priority === 'Important' ? 'var(--accent-info)' : 'var(--border-subtle)'};">
+                        <div class="flex-row" style="justify-content: space-between; margin-bottom: 1rem;">
+                            <span class="badge ${a.priority === 'Urgent' ? 'badge-danger' : a.priority === 'Important' ? 'badge-warning' : 'badge-success'}" style="font-size: 0.625rem;">${a.priority}</span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">${new Date(a.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <h4 style="font-size: 1.125rem; margin-bottom: 0.75rem;">${a.title}</h4>
+                        <p style="font-size: 0.875rem; color: var(--text-body); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem;">
+                            ${a.content}
+                        </p>
+                    </div>
+                `).join('');
+
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
+    </script>
+</body>
+</html>
